@@ -1,0 +1,83 @@
+﻿<!--
+    Programmer: Chris Heise
+    Course: CIS 2285-R01
+    Program: P5 Inventory Accounting Application
+    File: Calculator.razor
+-->
+
+@page "/InvestmentCalculator"
+@using HeiseP5.ViewModels
+@using System.ComponentModel.DataAnnotations;
+
+<h1>Investment Calculator</h1>
+<br />
+<form @onsubmit="viewModel.OnSubmitClick">
+    <fieldset>
+        <legend>Parameters</legend>
+        <label for="principle">Principle:</label><br />
+        <input type="text" @bind="viewModel.InvestmentCalc.PrincipleStart" /><br />
+        <label for="interest">Interest:</label><br />
+        <input type="text" @bind="viewModel.InvestmentCalc.InterestRate" /><br />
+        <label for="years">Years:</label><br />
+        <input type="text" @bind="viewModel.InvestmentCalc.NumOfYears" /><br />
+        <label for="compounds">Compounds per Year:</label><br />
+        <input type="text" @bind="viewModel.InvestmentCalc.TimesCompounded" /><br /><br />
+        <input type="submit" />
+    </fieldset>
+</form>
+
+@*When attempting to use the below, I get an uncaught exception:
+    ...DataAnnotationsValidator does not have a property matching the name 'ChildContent'*@
+
+@*<EditForm Model="@viewModel.InvestmentCalc" OnValidSubmit="@viewModel.OnSubmitClick">
+        <DataAnnotationsValidator>
+            Principle:
+            <InputNumber @bind-Value="@viewModel.InvestmentCalc.PrincipleStart" type="text" />
+            <br /><br />
+            Interest:
+            <InputNumber @bind-Value="@viewModel.InvestmentCalc.InterestRate" type="text" />
+            <br /><br />
+            Years:
+            <InputNumber @bind-Value="@viewModel.InvestmentCalc.NumOfYears" type="text" />
+            <br /><br />
+            Compuonds per Year:
+            <InputNumber @bind-Value="@viewModel.InvestmentCalc.TimesCompounded" type="text" />
+            <br /><br />
+            <button type="submit">Submit</button>
+            <br />
+            <ValidationSummary />
+        </DataAnnotationsValidator>
+    </EditForm>*@
+<EditForm Model="viewModel" OnValidSubmit="viewModel.OnSubmitClick">
+
+</EditForm>
+
+<br />
+<br />
+@if (viewModel.ResultsVisible)
+{
+    <div>
+        <h3>Calculation Summary</h3>
+        <b>Principle:</b>
+        @viewModel.InvestmentCalc.PrincipleStart.ToString("C")
+        <br />
+        <b>Years:</b>
+        @viewModel.InvestmentCalc.NumOfYears
+        <br />
+        <b>Interest:</b>
+        @viewModel.InvestmentCalc.InterestRate%
+        <br />
+        <b>Cmp/Years:</b>
+        @viewModel.InvestmentCalc.TimesCompounded
+        <br />
+        <b>Future Value:</b>
+        @viewModel.InvestmentCalc.FutureValue.ToString("C")
+        <br />
+        <button @onclick="viewModel.OnClearClick">Clear Form</button>
+        <br />
+    </div>
+}
+
+@code {
+    InvestmentCalcVM viewModel = new InvestmentCalcVM();
+}
